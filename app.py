@@ -18,7 +18,7 @@ No matter what, you would face a shark attack. The question is would you survive
 '''
 st.sidebar.write("Machine Learning is applied in this app!")
 st.sidebar.write("It uses a Random Forest Classification model trained with Kaggle's Shark attack dataset. "
-                 "The model uses the latest 10 years worth of the data (2008 to 2018 inclusive). "
+                 "The model uses the latest 10 years worth of data (2008 to 2018 inclusive). "
                  "This model was correct about 88% of the time when it came to predicting whether a person would survive a shark attack as he/she would face it.")
 st.sidebar.write("Have fun using this app to check your risk!")
 st.sidebar.subheader("Jim Meng Kok")
@@ -29,20 +29,15 @@ st.sidebar.markdown('Medium: [https://medium.com/@jimintheworld](https://medium.
 places = sorted(df['Destination'].unique())
 years = sorted(df['Year'].unique())
 months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] # sorted(df['Month'].unique()) # haven't sort by month names as this is in alphabetical order
-days = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"] # sorted(df['Day'].unique()) # haven't sort by days names as this is in alphabetical order
-times = ["Morning","Afternoon","Evening","Night","Midnight"] # sorted(df['Time'].unique())
+days = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
+times = ["Morning","Afternoon","Evening","Night","Midnight"]
 activities = sorted(df['Activity'].unique())
 
 # Age
 age = st.number_input("What is your age?", value=1, step=1)
 
 # Gender
-st.text("Please choose your gender:")
-col1, col2, col3 = st.beta_columns(3)
-with col1:
-    male = st.checkbox('M')
-with col2:
-    female = st.checkbox('F')
+sex = st.radio("Please choose your gender:", ('M', 'F'))
 
 # Place
 destination = st.selectbox("Where would you prefer to visit?", options=places)
@@ -141,8 +136,8 @@ def check_activity(response):
     if response == 'Windsurfing':
         return 37
 
-def sex_decider(male: object) -> object:
-    if male:
+def sex_decider(response):
+    if response == 'M':
         return 1
     else:
         return 0
@@ -431,7 +426,7 @@ def dep_dest(response):
 
 # Click button
 if st.button("Click to discover your fate"):
-    fate_list = [year_st, check_activity(activity_st), sex_decider(male), age, check_time(time_st), check_day(day_st), check_month(month_st), dep_dest(destination)]
+    fate_list = [year_st, check_activity(activity_st), sex_decider(sex), age, check_time(time_st), check_day(day_st), check_month(month_st), dep_dest(destination)]
     prediction = rf_model.predict([fate_list])
 
     if prediction == np.array([0]):
